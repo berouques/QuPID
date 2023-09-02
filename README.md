@@ -2,17 +2,19 @@
 
 <sup>the only temperature controller with a heart</sup>
 
-It is a PID temperature regulator for ESP8266 with dual control: direct (rotary encoder and LED display), or via browser using WiFi.
+This code is for a PID temperature regulator built with ESP8266 microcontroller.
+
+>[!NOTE]
+>Information on flashing and compilation are on the very [bottom of the page](#flashing).
 
 ## What it was designed for
 
-Device maintains the heater temperature as close to the setpoint as possible. This code, without any modifications, was tested in:
+Device maintains the heater temperature as close to the setpoint as possible and is pretty universal. This code, without any modifications, was used for very different heaters:
 
-* repairing modern electronic devices
-* chemical reactions
-* soldering electronic boards
-* work with special resins and molds
-* drying fruits and mushrooms at precisely controlled temperatures
+* makeshift heating plate for soldering
+* DIY heating mantle for chemical reactions
+* oven for special resins and molds
+* dryer for fruits and mushrooms at precisely controlled temperatures
 
 >[!WARNING]
 >The device was originally created for personal use, so any flaws I didn't notice may show up if your usage pattern is different from mine.
@@ -21,15 +23,14 @@ Device maintains the heater temperature as close to the setpoint as possible. Th
 
 ## Controls
 
-Controlling the thermostat with physical controls is simple, if not primitive:
+Direct control is simple, if not primitive:
 
-* increase the temperature
-* decrease the temperature
-* change PID mode
-* start the program mode
-* show the WiFi hotspot password on the display
+* in left part of LED display you see the current mode and setpoint (depending on mode)
+* in right part is current temperature
+* turn the rotary encoder to increase or decrease the setpoint
+* press the button to switch between BASIC MODE, ADAPTIVE MODE ("A"), PROGRAM MODE ("P_"), and WIFI PASSWORD (8 hexadecimal digits)
 
-Over WiFi you have the same as above (except showing Wifi password), plus:
+Over WiFi you can do all the same as above (except showing Wifi password), plus:
 
 * change the gains (Kp, Ki, Kd)
 * setting of startup parameters (default temperature, default PID configuration)
@@ -46,11 +47,6 @@ Over WiFi you have the same as above (except showing Wifi password), plus:
 In this mode the thermostat runs a simple program like "heat up to 100°C, keep the temperature for one hour, then cool down to 50°C, keep it for three hours, then turn off the heater". The "program mode" can only be set via WiFi, but once set and saved to flash, it can be turned on with a physical button. Here's what the program mode control panel looks like:
 
 ![](img/img_program.png) 
-
-## Flashing the firmware
-
-[Here](https://nodemcu.readthedocs.io/en/latest/flash/) is an article about flashing NodeMCU. In short, you will need either the CLI tool [esptool](https://github.com/espressif/esptool) or GUI app [NodeMCU flasher](https://github.com/marcelstoer/nodemcu-pyflasher), install it, then download and unpack the latest available release of QuPID and write both files in your ESP8266 module.
-
 
 ## Connecting
 
@@ -81,14 +77,6 @@ To connect to the device via WiFi:
 You don't need to graph manually (or by third-party programs) to see undershoot/overshoot. To make tuning easier, there are two types of graphs in the web panel: a "live graph" and an "history buffer" where stored latest 255 cycles of the PID controller. Both graphs display three metrics: setpoint (SV), temperature (PV), and heater power (PWM). Watching the graph helps you adjust the gains to minimize overshoot/undershoot. Of course, there is output of the same data via serial port for analysis.
 
 ![](img/img_history.png)
-
-## Compilation
-
-All you need is [https://platformio.org/](Platformio). This repository contains all needed libraries and other dependencies, so no library hunt is needed.
-
->[!IMPORTANT]
->Don't forget to build and upload Filesystem Image!
-
 
 ## Parts and modules
 
@@ -122,6 +110,19 @@ Wiring plan is not ready yet, but you have this:
   * DT -> D5
 
 * Triac, or a solid-state relay -> D4
+
+<a name="flashing"></a>
+## Flashing the firmware
+
+[Here](https://nodemcu.readthedocs.io/en/latest/flash/) is an article about flashing NodeMCU. In short, you will need either the CLI tool [esptool](https://github.com/espressif/esptool) or GUI app [NodeMCU flasher](https://github.com/marcelstoer/nodemcu-pyflasher), install it, then download and unpack the latest available release of QuPID and write both files in your ESP8266 module.
+
+
+## Compilation
+
+All you need is [https://platformio.org/](Platformio). This repository contains all needed libraries and other dependencies, so no library hunt is needed.
+
+>[!IMPORTANT]
+>Don't forget to build and upload Filesystem Image!
 
 
 ## Third-party libraries and stuff used in the sketch
