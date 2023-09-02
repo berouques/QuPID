@@ -4,14 +4,14 @@
 
 It is a PID temperature regulator for ESP8266 with dual control: direct (rotary encoder and LED display), or via browser using WiFi.
 
-The strong part of this thing is that the control is very simple: a couple of buttons are enough to control them all, and with a smartphone or computer with Wifi you can get a powerful control panel. Another good thing is that for tuning the PID gains you don't need to manually graph the values, there are ready to use graphs in the Web UI.
-
 ## What it was designed for
 
-* repairing modern electronics
+Device maintains the heater temperature as close to the setpoint as possible. This code, without any modifications, was tested in:
+
+* repairing modern electronic devices
 * chemical reactions
 * soldering electronic boards
-* work with the special resins and molds
+* work with special resins and molds
 * drying fruits and mushrooms at precisely controlled temperatures
 
 >[!WARNING]
@@ -31,7 +31,7 @@ Controlling the thermostat with physical controls is simple, if not primitive:
 
 Over WiFi you have the same as above (except showing Wifi password), plus:
 
-* change coefficients Kp, Ki, Kd
+* change the gains (Kp, Ki, Kd)
 * setting of startup parameters (default temperature, default PID configuration)
 * enable or disable logging of SV, PV and PWM values
 * displaying temperature graphs
@@ -43,9 +43,14 @@ Over WiFi you have the same as above (except showing Wifi password), plus:
 
 ## Program mode
 
-In this mode the thermostat runs a simple program like "heat up to 100°C, keep the temperature for one hour, then cool down to 50°C, keep it for three hours, then turn off the heater". The program mode can only be set via WiFi, but once set and saved to flash, it can be turned on with a physical button. Here's what the program mode control panel looks like:
+In this mode the thermostat runs a simple program like "heat up to 100°C, keep the temperature for one hour, then cool down to 50°C, keep it for three hours, then turn off the heater". The "program mode" can only be set via WiFi, but once set and saved to flash, it can be turned on with a physical button. Here's what the program mode control panel looks like:
 
 ![](img/img_program.png) 
+
+## Flashing the firmware
+
+[Here](https://nodemcu.readthedocs.io/en/latest/flash/) is an article about flashing NodeMCU. In short, you will need either the CLI tool [esptool](https://github.com/espressif/esptool) or GUI app [NodeMCU flasher](https://github.com/marcelstoer/nodemcu-pyflasher), install it, then download and unpack the latest available release of QuPID and write both files in your ESP8266 module.
+
 
 ## Connecting
 
@@ -67,9 +72,9 @@ To connect to the device via WiFi:
 ## PID modes and setting
 
 * Basic mode, where a setpoint can be set and the unit maintains it
-* Adaptive mode, where heating to the target temperature is faster due to two sets of coefficients Kp, Ki, Kd -- "conservative" and "aggressive".
-* by default, PID controller being called with interval of 1 second, but it can be increased. Useful for massive objects like boilers, distillers, etc.
-* there is an "Autotuner" that calculates the coefficients automatically. Unfortunately, this is a long procedure and usually requires later revision.
+* Adaptive mode, where heating to the target temperature is faster due to two sets of gains (Kp, Ki, Kd) -- "conservative" and "aggressive".
+* by default, PID controller being called with interval of 1 second, but this interval can be increased. Useful for massive objects like boilers, distillers, etc.
+* there is an "Autotuner" that calculates the gains automatically. Unfortunately, this is a long procedure and usually requires later tuning.
 
 ![](img/img_pid_settings.png)  ![](img/img_autotuner.png) 
 
@@ -79,7 +84,7 @@ You don't need to graph manually (or by third-party programs) to see undershoot/
 
 ## Compilation
 
-All you need is [https://platformio.org/](Platformio). The repository contains all needed libraries and other dependencies. 
+All you need is [https://platformio.org/](Platformio). This repository contains all needed libraries and other dependencies, so no library hunt is needed.
 
 >[!IMPORTANT]
 >Don't forget to build and upload Filesystem Image!
@@ -94,7 +99,7 @@ A handful of components totaling a dozen pounds sterling (this is of course assu
 * MAX7219 8-Digit 7-Segment Display Module - £2
 * Rotary Encoder Module 20IMP/REV W/BUTTON (I recommend the module with anti-bounce capacitors.) - £1
 * a pair of triacs (BT137 and MOC3061) or an off-the-shelf SSR module - £2-10
-* three resistors - £0.3
+* three resistors, wires and such - £0.5
 * old smartphone charger - free
 
 ## Wiring

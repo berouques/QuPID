@@ -588,16 +588,6 @@ void update_sensor()
 // ######## ##    ##  ######   #######  ########  ######## ##     ##
 
 /**
- * @brief The interrupt on any change of the encoder button pin
- */
-// IRAM_ATTR void encoder_btn_int()
-// {
-
-//   Encoder_button_pressed = true;
-//   delay(50);
-// }
-
-/**
  * @brief The interrupt on any change of the encoder CLK pin
  */
 IRAM_ATTR void encoder_int()
@@ -782,7 +772,7 @@ void program_setpoint(float pv)
 {
   program_pid(pv);
 
-  // если достигнута заданная температура +-threshold%, перейти на следующий шаг
+  // if the set temperature +-threshold% is reached, go to the next step
   if (abs(Conf.Program1[Program_step] - Pid_input) <= ((Pid_input / 100) * Conf.Program1_temp_threshold))
   {
     Program_step++;
@@ -801,13 +791,13 @@ void program_delay(float pv)
   }
   else if (Program_remaining_delay > 0)
   {
-    // вычесть из счетчика прошедшее время
+    // subtract time from the counter 
     Program_remaining_delay -= (millis() - Program_millis_prev) / 1000;
     Program_millis_prev = millis();
   }
   else if (Program_remaining_delay <= 0)
   {
-    // ожидание завершено
+    // waiting period is over
     Program_is_waiting = false;
     Program_step++;
   }
@@ -838,7 +828,7 @@ void program_tick(int program_id, float pv)
     Program_step++;
   }
 
-  // четные шаги - setpoint, нечетные - delay
+  // even steps - setpoint, odd steps - delay
   if (Program_step % 2)
   {
     // SETPOINT
